@@ -62,4 +62,10 @@ public:
 
 	void MoveRight(float Axis);
 
+	void Interact();
+
+private:
+
+	AActor* FocusedActor;
+
 };

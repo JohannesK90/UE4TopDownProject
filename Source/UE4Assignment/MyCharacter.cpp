@@ -10,6 +10,8 @@
 #include "Engine/World.h"
 #include <Runtime\Engine\Classes\Kismet\KismetMathLibrary.h>
 #include <Runtime\Engine\Classes\Kismet\KismetSystemLibrary.h>
+#include <Runtime\Engine\Public\DrawDebugHelpers.h>
+#include <UE4Assignment\Public\Interact\InteractInterface.h>
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -71,6 +73,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::MoveRight);
 
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyCharacter::Interact);
+
 }
 
 void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
@@ -97,7 +101,68 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 	GetController()->SetControlRotation(PlayerRot);
 
 	FString tempLog = CleanDirection.ToString();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, tempLog);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, tempLog);
+
+
+	FVector LineStart = CameraPosition;
+	FVector LineEnd = MouseDirection * 1000.0f;
+
+	DrawDebugLine(
+		GetWorld(),
+		LineStart,
+		LineEnd,
+		FColor::Orange,
+		false,
+		0.5f,
+		0,
+		0.0f
+	);
+
+
+	FHitResult HitResult;
+	FCollisionQueryParams LineParams(FName(""), false, GetOwner());
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		OUT HitResult,
+		LineStart,
+		LineEnd,
+		ECC_Visibility,
+		LineParams
+	);
+
+	AActor* InteractableActor = HitResult.GetActor();
+	if (InteractableActor)
+	{
+		if (InteractableActor != FocusedActor)
+		{
+			if (FocusedActor)
+			{
+				IInteractInterface* Interface = Cast<IInteractInterface>(FocusedActor);
+				if (Interface)
+				{
+					Interface->Execute_EndFocus(FocusedActor);
+				}
+			}
+			IInteractInterface* Interface = Cast<IInteractInterface>(InteractableActor);
+			if (Interface)
+			{
+				Interface->Execute_StartFocus(InteractableActor);
+			}
+			FocusedActor = InteractableActor;
+		}
+	}
+	else
+	{
+		if (FocusedActor)
+		{
+			IInteractInterface* Interface = Cast<IInteractInterface>(FocusedActor);
+			if (Interface)
+			{
+				Interface->Execute_EndFocus(FocusedActor);
+			}
+		}
+		FocusedActor = nullptr;
+	}
 
 }
 
@@ -124,5 +189,17 @@ void AMyCharacter::MoveRight(float Axis)
 
 	AddMovementInput(Direction, Axis);
 
+}
+
+void AMyCharacter::Interact()
+{
+	if (FocusedActor)
+	{
+		IInteractInterface* Interface = Cast<IInteractInterface>(FocusedActor);
+		if (Interface)
+		{
+			Interface->Execute_OnInteract(FocusedActor, GetOwner());
+		}
+	}
 }
 
