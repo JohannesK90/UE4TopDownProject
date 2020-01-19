@@ -11,12 +11,14 @@
 #include <Runtime\Engine\Classes\Kismet\KismetMathLibrary.h>
 #include <Runtime\Engine\Classes\Kismet\KismetSystemLibrary.h>
 #include <Runtime\Engine\Public\DrawDebugHelpers.h>
-#include <UE4Assignment\Public\Interact\InteractInterface.h>
+
+#include "UE4Assignment\Public\Interact\InteractInterface.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -53,6 +55,7 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	bDead = false;
+
 }
 
 // Called every frame
@@ -104,8 +107,14 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, tempLog);
 
 
-	FVector LineStart = CameraPosition;
-	FVector LineEnd = MouseDirection * 1000.0f;
+	// Interact RayTrace
+	FVector PlayerRightFootLocation = this->GetMesh()->GetBoneLocation("foot_r", EBoneSpaces::WorldSpace);
+	FVector PlayerLeftFootLocation = this->GetMesh()->GetBoneLocation("foot_l", EBoneSpaces::WorldSpace);
+
+	FVector PlayerBottomLocation = (PlayerRightFootLocation + PlayerLeftFootLocation) / 2;
+
+	FVector LineStart = PlayerBottomLocation + this->GetViewRotation().Vector();
+	FVector LineEnd = PlayerBottomLocation + this->GetViewRotation().Vector() * InteractRayTraceLength;
 
 	DrawDebugLine(
 		GetWorld(),
@@ -122,7 +131,7 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 	FHitResult HitResult;
 	FCollisionQueryParams LineParams(FName(""), false, GetOwner());
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
+	GetWorld()->LineTraceSingleByChannel(
 		OUT HitResult,
 		LineStart,
 		LineEnd,
@@ -163,7 +172,6 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 		}
 		FocusedActor = nullptr;
 	}
-
 }
 
 void AMyCharacter::MoveForward(float Axis)

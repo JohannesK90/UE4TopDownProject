@@ -20,6 +20,16 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (WeaponDataTable)
+	{
+		static const FString PString = FString("AK47DT"); // this is problem i think!!!
+		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
+		WeaponData = WeaponDataTable->FindRow<FWeaponData>(*EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString(), PString, true);
+		if (WeaponData)
+		{
+			MeshComp->SetSkeletalMesh(WeaponData->WeaponMesh);
+		}
+	}
 }
 
 // Called every frame
@@ -37,10 +47,11 @@ void AWeaponBase::OnInteract_Implementation(AActor* Caller)
 
 	Destroy();
 }
-
+ 
 void AWeaponBase::StartFocus_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Start Focus"));
+	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
+	UE_LOG(LogTemp, Warning, TEXT("Start Focus : %s"), *EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString());
 }
 
 void AWeaponBase::EndFocus_Implementation()

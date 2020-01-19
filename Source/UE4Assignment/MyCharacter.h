@@ -68,4 +68,10 @@ private:
 
 	AActor* FocusedActor;
 
+	APlayerController* PlayerController;
+
+	UPROPERTY(EditAnywhere)
+	float InteractRayTraceLength = 100.0f;
+
+
 };

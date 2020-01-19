@@ -5,9 +5,28 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "../Interact/InteractInterface.h"
-//#include "Engine/DataTable.h"
+#include "Engine/DataTable.h"
 
 #include "WeaponBase.generated.h"
+
+USTRUCT(BlueprintType)
+struct FWeaponData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	class USkeletalMesh* WeaponMesh;
+
+	UPROPERTY(EditAnywhere)
+	FString WeaponName;
+};
+
+UENUM(BlueprintType)
+enum class EWeaponNameEnum : uint8
+{
+	AK47	UMETA(DisplayName = "AK47"),
+	M4A1	UMETA(DisplayName = "M4A1"),
+};
 
 UCLASS()
 class UE4ASSIGNMENT_API AWeaponBase : public AActor, public IInteractInterface
@@ -25,6 +44,13 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* MeshComp;
 
+	UPROPERTY(EditAnywhere)
+	class UDataTable* WeaponDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
+	EWeaponNameEnum WeaponNameEnum;
+
+	FWeaponData* WeaponData;
 
 public:	
 	// Called every frame
