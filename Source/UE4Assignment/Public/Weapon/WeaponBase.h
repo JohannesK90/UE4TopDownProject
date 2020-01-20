@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "../Interact/InteractInterface.h"
 #include "Engine/DataTable.h"
+#include "../MyCharacter.h"
 
 #include "WeaponBase.generated.h"
 
@@ -65,5 +66,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	void EndFocus();
 	void EndFocus_Implementation();
+
+	void SetSimulatePhysics();
 
 };

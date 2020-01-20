@@ -13,6 +13,8 @@ AWeaponBase::AWeaponBase()
 	MeshComp = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMeshComponent");
 	RootComponent = MeshComp;
 
+	SetSimulatePhysics();
+
 }
 
 // Called when the game starts or when spawned
@@ -22,9 +24,9 @@ void AWeaponBase::BeginPlay()
 	
 	if (WeaponDataTable)
 	{
-		static const FString PString = FString("AK47DT"); // this is problem i think!!!
 		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
-		WeaponData = WeaponDataTable->FindRow<FWeaponData>(*EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString(), PString, true);
+		UE_LOG(LogTemp, Warning, TEXT("Start Focus : %s"), *EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString());
+		WeaponData = WeaponDataTable->FindRow<FWeaponData>(*EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString(), FString(""), true);
 		if (WeaponData)
 		{
 			MeshComp->SetSkeletalMesh(WeaponData->WeaponMesh);
@@ -43,9 +45,7 @@ void AWeaponBase::OnInteract_Implementation(AActor* Caller)
 {
 	UE_LOG(LogTemp, Warning, TEXT("On Interact"));
 
-	// Todo: equip weapon
-
-	Destroy();
+	//Destroy();
 }
  
 void AWeaponBase::StartFocus_Implementation()
@@ -57,5 +57,10 @@ void AWeaponBase::StartFocus_Implementation()
 void AWeaponBase::EndFocus_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("End Focus"));
+}
+
+void AWeaponBase::SetSimulatePhysics()
+{
+	MeshComp->SetSimulatePhysics(true);
 }
 

@@ -14,6 +14,7 @@
 
 #include "UE4Assignment\Public\Interact\InteractInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "Public/Weapon/WeaponBase.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -57,7 +58,6 @@ void AMyCharacter::BeginPlay()
 	bDead = false;
 
 }
-
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
@@ -207,7 +207,27 @@ void AMyCharacter::Interact()
 		if (Interface)
 		{
 			Interface->Execute_OnInteract(FocusedActor, GetOwner());
+
+			if (AWeaponBase* HitWeapon = Cast<AWeaponBase>(FocusedActor))
+			{
+				EquipWeapon(HitWeapon);
+			}
 		}
 	}
+}
+
+void AMyCharacter::EquipWeapon(AWeaponBase* Weapon)
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->DetachRootComponentFromParent();
+		CurrentWeapon->SetSimulatePhysics();
+		CurrentWeapon->SetActorEnableCollision(true);
+	}
+
+	CurrentWeapon = Weapon;
+	CurrentWeapon->DisableComponentsSimulatePhysics();
+	CurrentWeapon->SetActorEnableCollision(false);
+	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("hand_r_weapon"));
 }
 
