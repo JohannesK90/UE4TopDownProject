@@ -15,11 +15,11 @@ struct FWeaponData : public FTableRowBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere)
-	class USkeletalMesh* WeaponMesh;
+		UPROPERTY(EditAnywhere)
+		class USkeletalMesh* WeaponMesh;
 
 	UPROPERTY(EditAnywhere)
-	FString WeaponName;
+		FString WeaponName;
 };
 
 UENUM(BlueprintType)
@@ -33,40 +33,59 @@ UCLASS()
 class UE4ASSIGNMENT_API AWeaponBase : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AWeaponBase();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+		USkeletalMeshComponent* WeaponMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+		USceneComponent* WeaponMuzzle;
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+		bool bIsReloading = false;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	class USkeletalMeshComponent* MeshComp;
+		class USkeletalMeshComponent* MeshComp;
 
 	UPROPERTY(EditAnywhere)
-	class UDataTable* WeaponDataTable;
+		class UDataTable* WeaponDataTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
-	EWeaponNameEnum WeaponNameEnum;
+		EWeaponNameEnum WeaponNameEnum;
 
 	FWeaponData* WeaponData;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void OnInteract(AActor* Caller);
+		void OnInteract(AActor* Caller);
 	virtual void OnInteract_Implementation(AActor* Caller);
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void StartFocus();
+		void StartFocus();
 	void StartFocus_Implementation();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void EndFocus();
+		void EndFocus();
 	void EndFocus_Implementation();
 
 	void SetSimulatePhysics();
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
+		void StartFire();
+	virtual void StartFire_Implementation();
+	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
+		void EndFire();
+	virtual void EndFire_Implementation();
+	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
+		void Reload();
+	virtual void Reload_Implementation();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void FireBullet(float Velocity = 1.0f, float RateOfFire = 0.0f, float RecoilForce = 0.0f);
 
 };

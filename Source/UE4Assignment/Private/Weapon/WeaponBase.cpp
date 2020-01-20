@@ -10,10 +10,21 @@ AWeaponBase::AWeaponBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	MeshComp = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMeshComponent");
+	/*MeshComp = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMeshComponent");
 	RootComponent = MeshComp;
 
-	SetSimulatePhysics();
+	SetSimulatePhysics();*/
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	WeaponMesh->SetupAttachment(RootComponent);
+	WeaponMesh->SetSimulatePhysics(true);
+	//RootComponent = WeaponMesh;
+
+	if (WeaponMuzzle == nullptr)
+	{
+		WeaponMuzzle = CreateDefaultSubobject<USceneComponent>(TEXT("Muzzle"));
+		WeaponMuzzle->SetupAttachment(WeaponMesh);
+	}
 
 }
 
@@ -22,7 +33,7 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (WeaponDataTable)
+	/*if (WeaponDataTable)
 	{
 		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
 		UE_LOG(LogTemp, Warning, TEXT("Start Focus : %s"), *EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString());
@@ -31,7 +42,7 @@ void AWeaponBase::BeginPlay()
 		{
 			MeshComp->SetSkeletalMesh(WeaponData->WeaponMesh);
 		}
-	}
+	}*/
 }
 
 // Called every frame
@@ -62,5 +73,31 @@ void AWeaponBase::EndFocus_Implementation()
 void AWeaponBase::SetSimulatePhysics()
 {
 	MeshComp->SetSimulatePhysics(true);
+}
+
+void AWeaponBase::StartFire_Implementation()
+{
+	if (!bIsReloading)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetName() + TEXT(" - AWeaponBase::StartFire()"));
+	}
+}
+
+void AWeaponBase::EndFire_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetName() + TEXT(" - AWeaponBase::EndFire() "));
+}
+
+void AWeaponBase::Reload_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetName() + TEXT(" - AWeaponBase::Reload() "));
+}
+
+void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce)
+{
+	if (!bIsReloading)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AWeaponBase::FireBullet"));
+	}
 }
 

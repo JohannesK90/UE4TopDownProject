@@ -49,6 +49,9 @@ AMyCharacter::AMyCharacter()
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	// Set the inventory size, whit all empty elements
+	WeaponInventory.Init(nullptr, InventorySize);
+
 }
 
 // Called when the game starts or when spawned
@@ -56,7 +59,6 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	bDead = false;
-
 }
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
@@ -77,6 +79,11 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyCharacter::Interact);
+
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyCharacter::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AMyCharacter::EndFire);
+
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMyCharacter::Reload);
 
 }
 
@@ -225,9 +232,43 @@ void AMyCharacter::EquipWeapon(AWeaponBase* Weapon)
 		CurrentWeapon->SetActorEnableCollision(true);
 	}
 
+
 	CurrentWeapon = Weapon;
 	CurrentWeapon->DisableComponentsSimulatePhysics();
 	CurrentWeapon->SetActorEnableCollision(false);
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("hand_r_weapon"));
+
+	for (int i = 0; i < InventorySize; i++)
+	{
+		if (WeaponInventory[i] == nullptr)
+		{
+			WeaponInventory[i] = Weapon;
+			break;
+		}
+		//TODO: What if all the slots are occupied, then we should remove the current equiped whit the new weapon.
+	}
 }
 
+void AMyCharacter::StartFire()
+{
+	if (CurrentWeapon != nullptr)
+	{
+		CurrentWeapon->StartFire();
+	}
+}
+
+void AMyCharacter::EndFire()
+{
+	if (CurrentWeapon != nullptr)
+	{
+		CurrentWeapon->EndFire();
+	}
+}
+
+void AMyCharacter::Reload()
+{
+	if (CurrentWeapon != nullptr)
+	{
+		CurrentWeapon->Reload();
+	}
+}

@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "MyCharacter.generated.h"
 
+class AWeaponBase;
 UCLASS()
 class UE4ASSIGNMENT_API AMyCharacter : public ACharacter
 {
@@ -45,14 +46,19 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		int InventorySize = 3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		TArray<AWeaponBase*> WeaponInventory;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
-	class AWeaponBase* CurrentWeapon;
+		class AWeaponBase* CurrentWeapon;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -69,6 +75,10 @@ public:
 
 	void EquipWeapon(AWeaponBase* Weapon);
 
+	void StartFire();
+	void EndFire();
+	void Reload();
+
 private:
 
 	AActor* FocusedActor;
@@ -76,7 +86,7 @@ private:
 	APlayerController* PlayerController;
 
 	UPROPERTY(EditAnywhere)
-	float InteractRayTraceLength = 100.0f;
+		float InteractRayTraceLength = 100.0f;
 
 
 };
