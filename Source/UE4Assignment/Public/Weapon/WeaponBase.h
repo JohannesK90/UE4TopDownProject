@@ -5,31 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "../Interact/InteractInterface.h"
-#include "Engine/DataTable.h"
 #include "../MyCharacter.h"
 #include "BulletProjectile.h"
 
 #include "WeaponBase.generated.h"
-
-USTRUCT(BlueprintType)
-struct FWeaponData : public FTableRowBase
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere)
-		USkeletalMesh* WeaponMesh;
-
-	UPROPERTY(EditAnywhere)
-		FString WeaponName;
-};
-
-UENUM(BlueprintType)
-enum class EWeaponNameEnum : uint8
-{
-	Shotgun	UMETA(DisplayName = "Shotgun"),
-	Rifle	UMETA(DisplayName = "Rifle"),
-	Pistol	UMETA(DisplayName = "Pistol"),
-};
 
 UCLASS()
 class UE4ASSIGNMENT_API AWeaponBase : public AActor, public IInteractInterface
@@ -51,14 +30,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-		class UDataTable* WeaponDataTable;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		EWeaponNameEnum WeaponNameEnum;
-
-	FWeaponData* WeaponData;
 
 public:
 	// Called every frame

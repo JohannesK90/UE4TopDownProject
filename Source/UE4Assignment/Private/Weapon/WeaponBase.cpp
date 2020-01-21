@@ -32,20 +32,6 @@ void AWeaponBase::BeginPlay()
 	WeaponMesh->SetCollisionProfileName(TEXT("BlockAll"));
 	WeaponMesh->SetSimulatePhysics(true);
 
-	//DataTable, stuff not in use
-	/*if (WeaponDataTable)
-	{
-		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
-
-		UE_LOG(LogTemp, Warning, TEXT("Start Focus : %s"), *EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString());
-		WeaponData = WeaponDataTable->FindRow<FWeaponData>(*EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString(), FString(""), true);
-		if (WeaponData)
-		{
-			WeaponMesh->SetSkeletalMesh(WeaponData->WeaponMesh);
-			WeaponMesh->SetCollisionProfileName(TEXT("BlockAll"));
-			WeaponMesh->SetSimulatePhysics(true);
-		}
-	}*/
 }
 
 // Called every frame
@@ -64,8 +50,7 @@ void AWeaponBase::OnInteract_Implementation(AActor* Caller)
  
 void AWeaponBase::StartFocus_Implementation()
 {
-	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
-	UE_LOG(LogTemp, Warning, TEXT("Start Focus : %s"), *EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString());
+	UE_LOG(LogTemp, Warning, TEXT("Start Focus : %s"), *this->GetName());
 }
 
 void AWeaponBase::EndFocus_Implementation()
