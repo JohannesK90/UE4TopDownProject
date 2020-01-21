@@ -115,13 +115,9 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 
 
 	// Interact RayTrace
-	FVector PlayerRightFootLocation = this->GetMesh()->GetBoneLocation("foot_r", EBoneSpaces::WorldSpace);
-	FVector PlayerLeftFootLocation = this->GetMesh()->GetBoneLocation("foot_l", EBoneSpaces::WorldSpace);
-
-	FVector PlayerBottomLocation = (PlayerRightFootLocation + PlayerLeftFootLocation) / 2;
-
-	FVector LineStart = PlayerBottomLocation + this->GetViewRotation().Vector();
-	FVector LineEnd = PlayerBottomLocation + this->GetViewRotation().Vector() * InteractRayTraceLength;
+	FVector RayTraceStartPosition = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + RayTraceZOffset);
+	FVector LineStart = RayTraceStartPosition + this->GetViewRotation().Vector();
+	FVector LineEnd = RayTraceStartPosition + this->GetViewRotation().Vector() * InteractRayTraceLength;
 
 	DrawDebugLine(
 		GetWorld(),
@@ -228,10 +224,9 @@ void AMyCharacter::EquipWeapon(AWeaponBase* Weapon)
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->DetachRootComponentFromParent();
-		CurrentWeapon->SetSimulatePhysics();
+		CurrentWeapon->SetSimulatePhysics(true);
 		CurrentWeapon->SetActorEnableCollision(true);
 	}
-
 
 	CurrentWeapon = Weapon;
 	CurrentWeapon->DisableComponentsSimulatePhysics();

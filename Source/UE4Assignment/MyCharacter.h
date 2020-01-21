@@ -48,15 +48,22 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		int InventorySize = 3;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 		TArray<AWeaponBase*> WeaponInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interact")
+		float RayTraceZOffset = -80.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interact")
+		float InteractRayTraceLength = 100.0f;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
-		class AWeaponBase* CurrentWeapon;
+		AWeaponBase* CurrentWeapon;
 
 public:
 	// Called every frame
@@ -84,9 +91,5 @@ private:
 	AActor* FocusedActor;
 
 	APlayerController* PlayerController;
-
-	UPROPERTY(EditAnywhere)
-		float InteractRayTraceLength = 100.0f;
-
 
 };

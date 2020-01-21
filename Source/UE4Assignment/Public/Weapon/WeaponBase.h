@@ -15,8 +15,8 @@ struct FWeaponData : public FTableRowBase
 {
 	GENERATED_BODY()
 
-		UPROPERTY(EditAnywhere)
-		class USkeletalMesh* WeaponMesh;
+	UPROPERTY(EditAnywhere)
+		USkeletalMesh* WeaponMesh;
 
 	UPROPERTY(EditAnywhere)
 		FString WeaponName;
@@ -25,8 +25,9 @@ struct FWeaponData : public FTableRowBase
 UENUM(BlueprintType)
 enum class EWeaponNameEnum : uint8
 {
-	AK47	UMETA(DisplayName = "AK47"),
-	M4A1	UMETA(DisplayName = "M4A1"),
+	Shotgun	UMETA(DisplayName = "Shotgun"),
+	Rifle	UMETA(DisplayName = "Rifle"),
+	Pistol	UMETA(DisplayName = "Pistol"),
 };
 
 UCLASS()
@@ -37,9 +38,9 @@ class UE4ASSIGNMENT_API AWeaponBase : public AActor, public IInteractInterface
 public:
 	// Sets default values for this actor's properties
 	AWeaponBase();
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		USkeletalMeshComponent* WeaponMesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		USceneComponent* WeaponMuzzle;
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 		bool bIsReloading = false;
@@ -48,13 +49,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-		class USkeletalMeshComponent* MeshComp;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Weapon")
 		class UDataTable* WeaponDataTable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		EWeaponNameEnum WeaponNameEnum;
 
 	FWeaponData* WeaponData;
@@ -73,7 +71,7 @@ public:
 		void EndFocus();
 	void EndFocus_Implementation();
 
-	void SetSimulatePhysics();
+	void SetSimulatePhysics(bool value);
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
 		void StartFire();

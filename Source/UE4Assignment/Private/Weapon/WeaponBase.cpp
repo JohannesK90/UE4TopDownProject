@@ -10,21 +10,15 @@ AWeaponBase::AWeaponBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	/*MeshComp = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMeshComponent");
-	RootComponent = MeshComp;
-
-	SetSimulatePhysics();*/
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
-	WeaponMesh->SetupAttachment(RootComponent);
-	WeaponMesh->SetSimulatePhysics(true);
-	//RootComponent = WeaponMesh;
+	RootComponent = WeaponMesh;
 
 	if (WeaponMuzzle == nullptr)
 	{
 		WeaponMuzzle = CreateDefaultSubobject<USceneComponent>(TEXT("Muzzle"));
 		WeaponMuzzle->SetupAttachment(WeaponMesh);
 	}
+
 
 }
 
@@ -33,16 +27,19 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	/*if (WeaponDataTable)
+	if (WeaponDataTable)
 	{
 		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
+
 		UE_LOG(LogTemp, Warning, TEXT("Start Focus : %s"), *EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString());
 		WeaponData = WeaponDataTable->FindRow<FWeaponData>(*EnumPtr->GetDisplayValueAsText(WeaponNameEnum).ToString(), FString(""), true);
 		if (WeaponData)
 		{
-			MeshComp->SetSkeletalMesh(WeaponData->WeaponMesh);
+			WeaponMesh->SetSkeletalMesh(WeaponData->WeaponMesh);
+			WeaponMesh->SetCollisionProfileName(TEXT("BlockAll"));
+			WeaponMesh->SetSimulatePhysics(true);
 		}
-	}*/
+	}
 }
 
 // Called every frame
@@ -70,9 +67,9 @@ void AWeaponBase::EndFocus_Implementation()
 	UE_LOG(LogTemp, Warning, TEXT("End Focus"));
 }
 
-void AWeaponBase::SetSimulatePhysics()
+void AWeaponBase::SetSimulatePhysics(bool value)
 {
-	MeshComp->SetSimulatePhysics(true);
+	WeaponMesh->SetSimulatePhysics(value);
 }
 
 void AWeaponBase::StartFire_Implementation()
