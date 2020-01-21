@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vectors")
 		FVector MousePos;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vectors")
+		FVector WorldMousePosition;
+
 	/** Top down camera */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 		class UCameraComponent* TopDownCameraComponent;

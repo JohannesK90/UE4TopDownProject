@@ -3,6 +3,10 @@
 
 #include "UE4Assignment/Public/Weapon/WeaponBase.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include <UE4Assignment\MyPlayerController.h>
+#include <Runtime\Engine\Public\DrawDebugHelpers.h>
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -18,8 +22,6 @@ AWeaponBase::AWeaponBase()
 		WeaponMuzzle = CreateDefaultSubobject<USceneComponent>(TEXT("Muzzle"));
 		WeaponMuzzle->SetupAttachment(WeaponMesh);
 	}
-
-
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +29,11 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (WeaponDataTable)
+	WeaponMesh->SetCollisionProfileName(TEXT("BlockAll"));
+	WeaponMesh->SetSimulatePhysics(true);
+
+	//DataTable, stuff not in use
+	/*if (WeaponDataTable)
 	{
 		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EWeaponNameEnum"), true);
 
@@ -39,7 +45,7 @@ void AWeaponBase::BeginPlay()
 			WeaponMesh->SetCollisionProfileName(TEXT("BlockAll"));
 			WeaponMesh->SetSimulatePhysics(true);
 		}
-	}
+	}*/
 }
 
 // Called every frame
@@ -94,7 +100,25 @@ void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce
 {
 	if (!bIsReloading)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AWeaponBase::FireBullet"));
+		AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		FRotator MouseDir = UKismetMathLibrary::FindLookAtRotation(WeaponMuzzle->GetComponentLocation(), Player->WorldMousePosition);
+		WeaponMuzzle->SetWorldRotation(MouseDir);
+
+		ABulletProjectile* Bullet = GetWorld()->SpawnActorDeferred<ABulletProjectile>(ProjectileClass, WeaponMuzzle->GetComponentTransform());
+		
+		Bullet->SetupBullet(Velocity);
+		UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
+
+		DrawDebugLine(
+			GetWorld(),
+			WeaponMuzzle->GetComponentLocation(),
+			Player->WorldMousePosition,
+			FColor::Blue,
+			false,
+			0.5f,
+			0,
+			0.0f
+		);
 	}
 }
 

@@ -93,21 +93,20 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 	FPlane PlayerViewPlane = FPlane(GetActorLocation(), FVector(0.0f, 0.0f, 1.0f));
 	FVector CleanDirection = FVector(MouseDirection.X, MouseDirection.Y, 0.0f);
 
-	FVector Intersection;
 	float T;
-	UKismetMathLibrary::LinePlaneIntersection(CameraPosition, MouseDirection * 10000.0f, PlayerViewPlane, T, Intersection);
+	UKismetMathLibrary::LinePlaneIntersection(CameraPosition, MouseDirection * 10000.0f, PlayerViewPlane, T, WorldMousePosition);
 
 
 	UKismetSystemLibrary::DrawDebugPoint
 	(
 		this,
-		Intersection,
+		WorldMousePosition,
 		3.0F,
 		FLinearColor::Green,
 		10.0f
 	);
 
-	FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Intersection);
+	FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), WorldMousePosition);
 	GetController()->SetControlRotation(PlayerRot);
 
 	FString tempLog = CleanDirection.ToString();

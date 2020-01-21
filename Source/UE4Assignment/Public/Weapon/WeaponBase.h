@@ -7,6 +7,7 @@
 #include "../Interact/InteractInterface.h"
 #include "Engine/DataTable.h"
 #include "../MyCharacter.h"
+#include "BulletProjectile.h"
 
 #include "WeaponBase.generated.h"
 
@@ -38,12 +39,14 @@ class UE4ASSIGNMENT_API AWeaponBase : public AActor, public IInteractInterface
 public:
 	// Sets default values for this actor's properties
 	AWeaponBase();
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 		USkeletalMeshComponent* WeaponMesh;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 		USceneComponent* WeaponMuzzle;
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 		bool bIsReloading = false;
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+		TSubclassOf<class ABulletProjectile> ProjectileClass;
 
 protected:
 	// Called when the game starts or when spawned
