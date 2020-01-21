@@ -17,19 +17,19 @@ public:
 	// Sets default values for this character's properties
 	AMyCharacter();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vectors")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Vectors")
 		FVector ActorPos;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vectors")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Vectors")
 		FRotator ActorRot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Components")
 		USkeletalMeshComponent* PlayerMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Player Components")
 		bool bDead;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vectors")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Vectors")
 		FVector MousePos;
 
 	/** Top down camera */

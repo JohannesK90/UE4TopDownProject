@@ -22,9 +22,6 @@ AMyCharacter::AMyCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -111,8 +108,6 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 	GetController()->SetControlRotation(PlayerRot);
 
 	FString tempLog = CleanDirection.ToString();
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, tempLog);
-
 
 	// Interact RayTrace
 	FVector RayTraceStartPosition = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + RayTraceZOffset);
@@ -182,9 +177,9 @@ void AMyCharacter::MoveForward(float Axis)
 
 	if (!bDead)
 	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		/*const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);*/
+		const FVector Direction(1, 0, 0);
 		AddMovementInput(Direction, Axis);
 	}
 
@@ -193,10 +188,10 @@ void AMyCharacter::MoveForward(float Axis)
 void AMyCharacter::MoveRight(float Axis)
 {
 
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
+	/*const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);*/
 
-	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	const FVector Direction(0, 1, 0);
 
 	AddMovementInput(Direction, Axis);
 
