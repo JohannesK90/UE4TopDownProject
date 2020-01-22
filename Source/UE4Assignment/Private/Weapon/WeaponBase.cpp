@@ -15,6 +15,8 @@ AWeaponBase::AWeaponBase()
 	PrimaryActorTick.bCanEverTick = false;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	WeaponMesh->SetCollisionProfileName(TEXT("BlockAll"));
+	WeaponMesh->SetSimulatePhysics(true);
 	RootComponent = WeaponMesh;
 
 	if (WeaponMuzzle == nullptr)
@@ -28,9 +30,7 @@ AWeaponBase::AWeaponBase()
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	WeaponMesh->SetCollisionProfileName(TEXT("BlockAll"));
-	WeaponMesh->SetSimulatePhysics(true);
+
 
 }
 
@@ -86,18 +86,22 @@ void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce
 	if (!bIsReloading)
 	{
 		AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		FRotator MouseDir = UKismetMathLibrary::FindLookAtRotation(WeaponMuzzle->GetComponentLocation(), Player->WorldMousePosition);
+		FVector Start = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Vector();
+		FVector End = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Add(0.0f, FMath::RandRange(-RecoilForce, RecoilForce), 0.0f).Vector() * Range;
+
+		FRotator MouseDir = UKismetMathLibrary::FindLookAtRotation(Start, End);
 		WeaponMuzzle->SetWorldRotation(MouseDir);
 
 		ABulletProjectile* Bullet = GetWorld()->SpawnActorDeferred<ABulletProjectile>(ProjectileClass, WeaponMuzzle->GetComponentTransform());
 		
-		Bullet->SetupBullet(Velocity);
+		Bullet->SetupBullet(Velocity, Range);
 		UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
+
 
 		DrawDebugLine(
 			GetWorld(),
-			WeaponMuzzle->GetComponentLocation(),
-			Player->WorldMousePosition,
+			Start,
+			End,
 			FColor::Blue,
 			false,
 			0.5f,

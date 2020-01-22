@@ -30,7 +30,7 @@ public:
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION()
-		void SetupBullet(float Velocity);
+		void SetupBullet(float Velocity, float Range);
 
 	FORCEINLINE class USphereComponent* GetCollisionComp() const { return CollisionComp; }
 	FORCEINLINE class UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }

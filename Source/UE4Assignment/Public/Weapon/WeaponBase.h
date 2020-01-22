@@ -22,10 +22,12 @@ public:
 		USkeletalMeshComponent* WeaponMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 		USceneComponent* WeaponMuzzle;
-	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-		bool bIsReloading = false;
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 		TSubclassOf<class ABulletProjectile> ProjectileClass;
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+		bool bIsReloading = false;
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+		float Range = 500.0f;
 
 protected:
 	// Called when the game starts or when spawned
