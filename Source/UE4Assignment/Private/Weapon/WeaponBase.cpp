@@ -81,20 +81,20 @@ void AWeaponBase::Reload_Implementation()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetName() + TEXT(" - AWeaponBase::Reload() "));
 }
 
-void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce)
+void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce, float BulletRange)
 {
 	if (!bIsReloading)
 	{
 		AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 		FVector Start = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Vector();
-		FVector End = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Add(0.0f, FMath::RandRange(-RecoilForce, RecoilForce), 0.0f).Vector() * Range;
+		FVector End = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Add(0.0f, FMath::RandRange(-RecoilForce, RecoilForce), 0.0f).Vector() * BulletRange;
 
 		FRotator MouseDir = UKismetMathLibrary::FindLookAtRotation(Start, End);
 		WeaponMuzzle->SetWorldRotation(MouseDir);
 
 		ABulletProjectile* Bullet = GetWorld()->SpawnActorDeferred<ABulletProjectile>(ProjectileClass, WeaponMuzzle->GetComponentTransform());
 		
-		Bullet->SetupBullet(Velocity, Range);
+		Bullet->SetupBullet(Velocity, BulletRange);
 		UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
 
 

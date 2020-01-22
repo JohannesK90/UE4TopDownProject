@@ -26,8 +26,6 @@ public:
 		TSubclassOf<class ABulletProjectile> ProjectileClass;
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 		bool bIsReloading = false;
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-		float Range = 500.0f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -60,6 +58,6 @@ public:
 	virtual void Reload_Implementation();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void FireBullet(float Velocity = 1.0f, float RateOfFire = 0.0f, float RecoilForce = 0.0f);
+		void FireBullet(float Velocity = 1.0f, float RateOfFire = 0.0f, float RecoilForce = 0.0f, float BulletRange = 1200.0f);
 
 };

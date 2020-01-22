@@ -20,8 +20,9 @@ void AMyPlayerController::Tick(float DeltaTime)
 		DeprojectMousePositionToWorld(MousePos, MouseDir);
 
 		Char->MouseTrace(MousePos, MouseDir);
+		
 
-		UKismetSystemLibrary::DrawDebugPoint
+		/*UKismetSystemLibrary::DrawDebugPoint
 		(
 			this,
 			MousePos,
@@ -38,7 +39,7 @@ void AMyPlayerController::Tick(float DeltaTime)
 			3.0F,
 			FLinearColor::Red,
 			0.0f
-		);
+		);*/
 
 		/*This retruns a Vector position from under the mouse in the world.
 		GetHitResultUnderCursor(ECollisionChannel::ECC_WorldStatic, true, TraceHitResult);

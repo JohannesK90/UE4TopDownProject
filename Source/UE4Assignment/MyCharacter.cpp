@@ -47,6 +47,7 @@ AMyCharacter::AMyCharacter()
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Set the inventory size, whit all empty elements
+
 	WeaponInventory.Init(nullptr, InventorySize);
 
 }
@@ -61,9 +62,7 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
-
+	
 }
 
 // Called to bind functionality to input
@@ -100,7 +99,7 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 		WorldMousePosition,
 		3.0F,
 		FLinearColor::Green,
-		10.0f
+		0.01f
 	);
 
 	FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), WorldMousePosition);

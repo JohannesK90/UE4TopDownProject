@@ -23,7 +23,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Vectors")
 		FRotator ActorRot;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Player Components")
 		USkeletalMeshComponent* PlayerMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Player Components")
@@ -36,11 +36,11 @@ public:
 		FVector WorldMousePosition;
 
 	/** Top down camera */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		class UCameraComponent* TopDownCameraComponent;
 
 	/** Camera boom positioning the camera above the character */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		class USpringArmComponent* CameraBoom;
 
 	/** Returns TopDownCameraComponent subobject **/
@@ -49,16 +49,16 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory")
 		int InventorySize = 3;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory")
 		TArray<AWeaponBase*> WeaponInventory;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interact")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Interact")
 		float RayTraceZOffset = -80.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interact")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Interact")
 		float InteractRayTraceLength = 100.0f;
 
 protected:
