@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "VFX.h"
 #include "BulletProjectile.generated.h"
 
 UCLASS()
@@ -16,6 +17,9 @@ class UE4ASSIGNMENT_API ABulletProjectile : public AActor
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 		class UProjectileMovementComponent* ProjectileMovement;
+
+	UPROPERTY(VisibleAnywhere, Category = "Projectile")
+		class UVFX* ParticleSystem;
 
 public:
 	// Sets default values for this actor's properties

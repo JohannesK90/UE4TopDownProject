@@ -98,7 +98,7 @@ void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce
 		UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
 
 
-		DrawDebugLine(
+		/*DrawDebugLine(
 			GetWorld(),
 			Start,
 			End,
@@ -107,7 +107,7 @@ void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce
 			0.5f,
 			0,
 			0.0f
-		);
+		);*/
 	}
 }
 

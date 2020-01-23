@@ -15,6 +15,7 @@
 #include "UE4Assignment\Public\Interact\InteractInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Public/Weapon/WeaponBase.h"
+#include "WorldCollision.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -62,7 +63,9 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	DrawLaserSight();
+
 }
 
 // Called to bind functionality to input
@@ -258,5 +261,24 @@ void AMyCharacter::Reload()
 	if (CurrentWeapon != nullptr)
 	{
 		CurrentWeapon->Reload();
+	}
+}
+
+void AMyCharacter::DrawLaserSight()
+{
+	if (CurrentWeapon != nullptr)
+	{
+		FVector Start = CurrentWeapon->WeaponMuzzle->GetComponentLocation();
+		FVector End = CurrentWeapon->WeaponMuzzle->GetComponentLocation() + GetViewRotation().Vector() * 1300;
+
+		FCollisionQueryParams Params;
+		FHitResult Hits;
+		GetWorld()->LineTraceSingleByChannel(Hits, Start, End, ECC_WorldDynamic, Params);
+		if (Hits.Actor != nullptr)
+		{
+			End = Hits.Location;
+		}
+
+		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 0.02f, 0, 0.0f);
 	}
 }

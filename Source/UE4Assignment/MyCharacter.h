@@ -88,6 +88,7 @@ public:
 	void StartFire();
 	void EndFire();
 	void Reload();
+	void DrawLaserSight();
 
 private:
 

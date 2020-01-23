@@ -4,6 +4,7 @@
 #include "BulletProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/PrimitiveComponent.h"
 
 // Sets default values
 ABulletProjectile::ABulletProjectile()
@@ -19,6 +20,8 @@ ABulletProjectile::ABulletProjectile()
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
+
+	ParticleSystem = CreateDefaultSubobject<UVFX>(TEXT("ParticleImpact"));
 }
 
 // Called when the game starts or when spawned
@@ -31,12 +34,16 @@ void ABulletProjectile::BeginPlay()
 void ABulletProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
+	HitComp->SetSimulatePhysics(true);
+	float Mass = HitComp->GetMass();
+	HitComp->SetSimulatePhysics(false);
+	FVector Force = GetVelocity() * Mass;
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
-		Destroy();
+		OtherComp->AddImpulseAtLocation(Force, GetActorLocation());
 	}
+	ParticleSystem->SpawnParticle(Hit.Location, FRotator::ZeroRotator);
+		Destroy();
 }
 
 void ABulletProjectile::SetupBullet(float Velocity, float Range)
