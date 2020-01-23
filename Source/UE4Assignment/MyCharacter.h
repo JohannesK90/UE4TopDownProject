@@ -60,13 +60,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Interact")
 		float InteractRayTraceLength = 100.0f;
+	
+	UPROPERTY(VisibleAnywhere)
+		AWeaponBase* CurrentWeapon;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(VisibleAnywhere)
-		AWeaponBase* CurrentWeapon;
 
 public:
 	// Called every frame
