@@ -86,7 +86,9 @@ public:
 	void EquipWeapon(AWeaponBase* Weapon);
 
 	void StartFire();
+
 	void EndFire();
+
 	void Reload();
 	void DrawLaserSight();
 
