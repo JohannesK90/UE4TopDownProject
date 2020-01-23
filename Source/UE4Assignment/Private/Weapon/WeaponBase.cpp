@@ -5,8 +5,11 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "TimerManager.h"
+#include "Misc/Attribute.h"
 #include <UE4Assignment\MyPlayerController.h>
 #include <Runtime\Engine\Public\DrawDebugHelpers.h>
+
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -31,7 +34,7 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	
 }
 
 // Called every frame
@@ -39,6 +42,7 @@ void AWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
 void AWeaponBase::OnInteract_Implementation(AActor* Caller)
@@ -65,20 +69,23 @@ void AWeaponBase::SetSimulatePhysics(bool value)
 
 void AWeaponBase::StartFire_Implementation()
 {
-	if (!bIsReloading)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetName() + TEXT(" - AWeaponBase::StartFire()"));
-	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Fire Called");
+	FTimerDelegate Delegate;
+	Delegate.BindUObject(this, &AWeaponBase::FireLineTrace, 1.0f, 1.0f, 1000.0f);
+	GetWorldTimerManager().SetTimer(AutomaticFireHandle, Delegate, 0.1f, true, 0.1f);
+	
 }
 
 void AWeaponBase::EndFire_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetName() + TEXT(" - AWeaponBase::EndFire() "));
+
+	GetWorldTimerManager().ClearAllTimersForObject(this);
 }
 
 void AWeaponBase::Reload_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetName() + TEXT(" - AWeaponBase::Reload() "));
+
+
 }
 
 void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce, float BulletRange)
@@ -98,16 +105,25 @@ void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce
 		UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
 
 
-		DrawDebugLine(
-			GetWorld(),
-			Start,
-			End,
-			FColor::Blue,
-			false,
-			0.5f,
-			0,
-			0.0f
-		);
+		DrawDebugLine(GetWorld(),Start, End, FColor::Blue, false, 0.5f, 0, 0.0f);
 	}
 }
 
+void AWeaponBase::FireLineTrace(float RateOfFire, float RecoilForce, float BulletRange)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Trace Called");
+
+	FHitResult OutHit;
+	AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	FVector Start = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Vector();
+	FVector End = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Add(0.0f, FMath::RandRange(-RecoilForce, RecoilForce), 0.0f).Vector() * BulletRange;
+
+	FRotator MouseDir = UKismetMathLibrary::FindLookAtRotation(Start, End);
+	WeaponMuzzle->SetWorldRotation(MouseDir);
+	
+	GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, true, 10.0f);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Trace end");
+	
+}
