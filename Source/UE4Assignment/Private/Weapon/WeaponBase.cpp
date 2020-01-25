@@ -104,21 +104,7 @@ void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce
 		Bullet->SetupBullet(Velocity, BulletRange);
 		UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
 
-
-<<<<<<< HEAD
-		/*DrawDebugLine(
-			GetWorld(),
-			Start,
-			End,
-			FColor::Blue,
-			false,
-			0.5f,
-			0,
-			0.0f
-		);*/
-=======
 		DrawDebugLine(GetWorld(),Start, End, FColor::Blue, false, 0.5f, 0, 0.0f);
->>>>>>> a55f4f6fed9aea82485f8cf2b648df0ae208467c
 	}
 }
 
