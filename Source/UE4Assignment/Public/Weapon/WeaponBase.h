@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "../Interact/InteractInterface.h"
 #include "../MyCharacter.h"
-#include "BulletProjectile.h"
+#include "Projectile/Projectile.h"
 
 #include "WeaponBase.generated.h"
 
@@ -25,8 +25,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 		USceneComponent* WeaponMuzzle;
 
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class ABulletProjectile> ProjectileClass;
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon|Projectile")
+		TSubclassOf<class AProjectile> ProjectileClass;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 		bool bIsReloading = false;
@@ -51,8 +51,6 @@ protected:
 
 private:
 
-	
-	
 	FTimerHandle AutomaticFireHandle;
 
 	bool bExuteActive = true;

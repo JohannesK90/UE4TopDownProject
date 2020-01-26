@@ -5,18 +5,17 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Projectile.h"
-
-#include "ShotgunProjectileComponent.generated.h"
+#include "SingleFireProjectileComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class UE4ASSIGNMENT_API UShotgunProjectileComponent : public UActorComponent
+class UE4ASSIGNMENT_API USingleFireProjectileComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UShotgunProjectileComponent();
+	USingleFireProjectileComponent();
 
 protected:
 	// Called when the game starts
@@ -25,6 +24,5 @@ protected:
 public:	
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	void Fire(float Velocity, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine);
-
+		void Fire(float Velocity, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine);
 };

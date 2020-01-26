@@ -219,7 +219,7 @@ void AMyCharacter::EquipWeapon(AWeaponBase* Weapon)
 {
 	if (CurrentWeapon)
 	{
-		CurrentWeapon->DetachRootComponentFromParent();
+		CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		CurrentWeapon->SetSimulatePhysics(true);
 		CurrentWeapon->SetActorEnableCollision(true);
 	}

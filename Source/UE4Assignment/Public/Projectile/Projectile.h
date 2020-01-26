@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include <Components/SphereComponent.h>
+#include "VFX.h"
 #include <GameFramework/ProjectileMovementComponent.h>
 
 #include "Projectile.generated.h"
@@ -23,16 +24,23 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	// Sphere collision component.
-	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	UPROPERTY(VisibleDefaultsOnly, Category = "Projectile")
 		USphereComponent* CollisionComponent;
+	
+	// Sphere collision component.
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+		float CollisionRadius = 5.0f;
 
 	// Projectile movement component.
-	UPROPERTY(VisibleAnywhere, Category = Movement)
+	UPROPERTY(VisibleAnywhere, Category = "Projectile")
 		UProjectileMovementComponent* ProjectileMovementComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Projectile")
+		class UVFX* ParticleSystem;
+
+public:
 
 	UFUNCTION()
 	void SetupMovement(float Velocity, float BulletRange);

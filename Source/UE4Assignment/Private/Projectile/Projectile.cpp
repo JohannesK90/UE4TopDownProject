@@ -6,16 +6,13 @@
 // Sets default values
 AProjectile::AProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
-
 	// Use a sphere as a simple collision representation.
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Projectile"));
 	CollisionComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 
 	// Set the sphere's collision radius.
-	CollisionComponent->InitSphereRadius(5.0f);
+	CollisionComponent->InitSphereRadius(CollisionRadius);
 	// Set the root component to be the collision component.
 	RootComponent = CollisionComponent;
 
@@ -23,6 +20,7 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
 
+	ParticleSystem = CreateDefaultSubobject<UVFX>(TEXT("ParticleImpact"));
 }
 
 // Called when the game starts or when spawned
@@ -30,13 +28,6 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void AProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AProjectile::SetupMovement(float Velocity, float BulletRange)
@@ -54,11 +45,16 @@ void AProjectile::FireInDirection(const FVector& ShootDirection)
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
+	// Only add impulse and destroy projectile if we hit a physics
+	HitComponent->SetSimulatePhysics(true);
+	float Mass = HitComponent->GetMass();
+	HitComponent->SetSimulatePhysics(false);
+	FVector Force = GetVelocity() * Mass;
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL) && OtherComponent->IsSimulatingPhysics())
 	{
-		OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
-
-		Destroy();
+		OtherComponent->AddImpulseAtLocation(Force, GetActorLocation());
 	}
+	ParticleSystem->SpawnParticle(Hit.Location, FRotator::ZeroRotator);
+	Destroy();
 }
 

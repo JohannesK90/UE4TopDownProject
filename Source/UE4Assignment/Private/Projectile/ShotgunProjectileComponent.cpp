@@ -20,13 +20,14 @@ void UShotgunProjectileComponent::BeginPlay()
 
 void UShotgunProjectileComponent::Fire(float Velocity, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine)
 {
-	if (!ProjectileClass)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ProjectileClass is null. (ShotgunProjectileComponent -> ProjectileClass -> BP_Projectile)"));
-		return;
-	}
 
 	AWeaponBase* Weapon = Cast<AWeaponBase>(GetOwner());
+
+	if (!Weapon->ProjectileClass)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ProjectileClass is null."));
+		return;
+	}
 
 	// Shotgun Ammo Reduce Logic
 	if (Weapon->CurrentAmmo <= 0)
@@ -51,7 +52,7 @@ void UShotgunProjectileComponent::Fire(float Velocity, float NumOfBullets, float
 		MuzzleTransform.SetRotation(RandomRotation.Quaternion());
 
 		// SpawnActorDeferred -> modify projectile's initialLifeSpan with BulletRange -> FinishSpawningActor
-		AProjectile* Projectile = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, MuzzleTransform);
+		AProjectile* Projectile = GetWorld()->SpawnActorDeferred<AProjectile>(Weapon->ProjectileClass, MuzzleTransform);
 		Projectile->SetupMovement(Velocity, BulletRange);
 		UGameplayStatics::FinishSpawningActor(Projectile, MuzzleTransform);
 

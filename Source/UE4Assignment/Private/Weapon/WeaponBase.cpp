@@ -9,6 +9,7 @@
 #include "Misc/Attribute.h"
 #include <UE4Assignment\MyPlayerController.h>
 #include <Runtime\Engine\Public\DrawDebugHelpers.h>
+#include "Projectile/Projectile.h"
 
 
 // Sets default values
@@ -103,28 +104,27 @@ void AWeaponBase::Reload()
 
 void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce, float BulletRange)
 {
-	if (CurrentAmmo <= 0) 
-	{
-		return; 
-	}
-	CurrentAmmo -= 1;
+	//if (CurrentAmmo <= 0) 
+	//{
+	//	return; 
+	//}
+	//CurrentAmmo -= 1;
 
-	if (!bIsReloading)
-	{
-		AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-		FVector Start = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Vector();
-		FVector End = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Add(0.0f, FMath::RandRange(-RecoilForce, RecoilForce), 0.0f).Vector() * BulletRange;
+	//if (!bIsReloading)
+	//{
+	//	AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	//	FVector Start = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Vector();
+	//	FVector End = WeaponMuzzle->GetComponentLocation() + Player->GetViewRotation().Add(0.0f, FMath::RandRange(-RecoilForce, RecoilForce), 0.0f).Vector() * BulletRange;
 
-		FRotator MouseDir = UKismetMathLibrary::FindLookAtRotation(Start, End);
-		WeaponMuzzle->SetWorldRotation(MouseDir);
+	//	FRotator MouseDir = UKismetMathLibrary::FindLookAtRotation(Start, End);
+	//	WeaponMuzzle->SetWorldRotation(MouseDir);
 
-		ABulletProjectile* Bullet = GetWorld()->SpawnActorDeferred<ABulletProjectile>(ProjectileClass, WeaponMuzzle->GetComponentTransform());
-		
-		Bullet->SetupBullet(Velocity, BulletRange);
-		UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
+	//	AProjectile* Bullet = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, WeaponMuzzle->GetComponentTransform());
+	//	Bullet->SetupMovement(Velocity, BulletRange);
+	//	UGameplayStatics::FinishSpawningActor(Bullet, WeaponMuzzle->GetComponentTransform());
 
-		DrawDebugLine(GetWorld(),Start, End, FColor::Blue, false, 0.5f, 0, 0.0f);
-	}
+	//	DrawDebugLine(GetWorld(),Start, End, FColor::Blue, false, 0.5f, 0, 0.0f);
+	//}
 }
 
 void AWeaponBase::FireLineTrace(float RateOfFire, float RecoilForce, float BulletRange)
