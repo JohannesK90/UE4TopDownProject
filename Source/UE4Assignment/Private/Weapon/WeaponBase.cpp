@@ -34,6 +34,7 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CurrentAmmo = AmmoClip;
 	
 }
 
@@ -73,7 +74,6 @@ void AWeaponBase::StartFire_Implementation()
 	FTimerDelegate Delegate;
 	Delegate.BindUObject(this, &AWeaponBase::FireLineTrace, 1.0f, 1.0f, 1000.0f);
 	GetWorldTimerManager().SetTimer(AutomaticFireHandle, Delegate, 0.1f, true, 0.1f);
-	
 }
 
 void AWeaponBase::EndFire_Implementation()
@@ -82,14 +82,33 @@ void AWeaponBase::EndFire_Implementation()
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 }
 
-void AWeaponBase::Reload_Implementation()
+void AWeaponBase::Reload()
 {
+	if (AmmoPool <= 0 || CurrentAmmo >= AmmoClip)
+	{
+		return;
+	}
 
-
+	if (AmmoPool < (AmmoClip - CurrentAmmo))
+	{
+		CurrentAmmo += AmmoPool;
+		AmmoPool = 0;
+	}
+	else
+	{
+		AmmoPool -= AmmoClip - CurrentAmmo;
+		CurrentAmmo = AmmoClip;
+	}
 }
 
 void AWeaponBase::FireBullet(float Velocity, float RateOfFire, float RecoilForce, float BulletRange)
 {
+	if (CurrentAmmo <= 0) 
+	{
+		return; 
+	}
+	CurrentAmmo -= 1;
+
 	if (!bIsReloading)
 	{
 		AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());

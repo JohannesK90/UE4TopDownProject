@@ -4,6 +4,21 @@
 #include "UE4AssignmentPlayerController.h"
 #include "UE4AssignmentCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include <Blueprint/UserWidget.h>
+
+void AUE4AssignmentGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (PlayerHUDClass)
+	{
+		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		if (CurrentWidget)
+		{
+			CurrentWidget->AddToViewport();
+		}
+	}
+}
 
 AUE4AssignmentGameMode::AUE4AssignmentGameMode()
 {

@@ -33,6 +33,18 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 		bool bAutomaticFire = false;
+
+	//ammo
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Ammo")
+		int32 AmmoClip;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Ammo")
+		int32 AmmoPool;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|Ammo")
+		int32 CurrentAmmo;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -51,33 +63,29 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 		void OnInteract(AActor* Caller);
+	virtual void OnInteract_Implementation(AActor* Caller);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 		void StartFocus();
 	void StartFocus_Implementation();
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 		void EndFocus();
 	void EndFocus_Implementation();
+
 	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
 		void StartFire();
 	virtual void StartFire_Implementation();
+
 	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
 		void EndFire();
 	virtual void EndFire_Implementation();
-	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
+
+	UFUNCTION()
 		void Reload();
-	virtual void Reload_Implementation();
-	
-	
 
-
-
-	virtual void OnInteract_Implementation(AActor* Caller);
-
-
-
-	
-	void SetSimulatePhysics(bool value);
+	UFUNCTION()
+		void SetSimulatePhysics(bool value);
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		void FireBullet(float Velocity = 1.0f, float RateOfFire = 0.0f, float RecoilForce = 0.0f, float BulletRange = 1200.0f);

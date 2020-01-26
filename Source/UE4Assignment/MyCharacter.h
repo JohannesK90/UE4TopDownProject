@@ -61,7 +61,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Interact")
 		float InteractRayTraceLength = 100.0f;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		AWeaponBase* CurrentWeapon;
 
 protected:
