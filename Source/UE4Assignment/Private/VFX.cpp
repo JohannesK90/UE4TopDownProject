@@ -22,7 +22,7 @@ void UVFX::BeginPlay()
 
 void UVFX::SpawnParticle(FVector Location, FRotator Rotation)
 {
-	UParticleSystemComponent* Test = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, Location, Rotation);
+	UParticleSystemComponent* SpawnedParticle = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, Location, Rotation);
 }
 
 

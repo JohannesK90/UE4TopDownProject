@@ -52,6 +52,5 @@ void ABulletProjectile::SetupBullet(float Velocity, float Range)
 	ProjectileMovement->MaxSpeed = Velocity * 1000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
-	//InitialLifeSpan = 10.0f; // Should this exists ?
 	InitialLifeSpan = Range / ProjectileMovement->MaxSpeed;
 }
