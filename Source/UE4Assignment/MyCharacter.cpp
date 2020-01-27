@@ -68,6 +68,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	//Binding player input and calling the appropriate Fuction.
+
 	PlayerInputComponent->BindAxis("Turn", this, &AMyCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::MoveRight);
@@ -81,12 +83,13 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+//Main function for player controller look for the Top-down project.
 void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 {
-
+	//Bind "PlayerViewPlane" to the character plane to make rotaion only allow in the Z-axis.
 	FPlane PlayerViewPlane = FPlane(GetActorLocation(), FVector(0.0f, 0.0f, 1.0f));
-	FVector CleanDirection = FVector(MouseDirection.X, MouseDirection.Y, 0.0f);
 
+	//Useing the "LinePlaneIntersection" function we are able to draw a line trace to the world and store the mouse position in "WorldMousePosition".
 	float T;
 	UKismetMathLibrary::LinePlaneIntersection(CameraPosition, MouseDirection * 10000.0f, PlayerViewPlane, T, WorldMousePosition);
 
@@ -100,10 +103,9 @@ void AMyCharacter::MouseTrace(FVector CameraPosition, FVector MouseDirection)
 		0.01f
 	);
 
+	//Make the character rotate towards the mouse position.
 	FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), WorldMousePosition);
 	GetController()->SetControlRotation(PlayerRot);
-
-	FString tempLog = CleanDirection.ToString();
 
 	// Interact RayTrace
 	FVector RayTraceStartPosition = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + RayTraceZOffset);
@@ -173,8 +175,6 @@ void AMyCharacter::MoveForward(float Axis)
 
 	if (!bDead)
 	{
-		/*const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);*/
 		const FVector Direction(1, 0, 0);
 		AddMovementInput(Direction, Axis);
 	}
@@ -183,13 +183,12 @@ void AMyCharacter::MoveForward(float Axis)
 
 void AMyCharacter::MoveRight(float Axis)
 {
-
-	/*const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);*/
-
-	const FVector Direction(0, 1, 0);
-
-	AddMovementInput(Direction, Axis);
+	if (!bDead) 
+	{
+		const FVector Direction(0, 1, 0);
+		AddMovementInput(Direction, Axis);
+	}
+	
 
 }
 
