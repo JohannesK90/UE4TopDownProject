@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../Interact/InteractInterface.h"
-#include "../MyCharacter.h"
+#include "Interact/InteractInterface.h"
 #include "Projectile/Projectile.h"
+
+#include <Components/SkeletalMeshComponent.h>
 
 #include "WeaponBase.generated.h"
 
@@ -19,45 +20,30 @@ public:
 	// Sets default values for this actor's properties
 	AWeaponBase();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon Info|Mesh")
 		USkeletalMeshComponent* WeaponMesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
-		USceneComponent* WeaponMuzzle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon|Projectile")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Info|Projectile")
 		TSubclassOf<class AProjectile> ProjectileClass;
 
-	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	UPROPERTY(VisibleAnywhere, Category = "Weapon Info|Ammo")
 		bool bIsReloading = false;
 
-	UPROPERTY(VisibleAnywhere, Category = "Weapon")
-		bool bAutomaticFire = false;
-
-	//ammo
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Ammo")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|Ammo")
 		int32 AmmoClip;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Ammo")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|Ammo")
 		int32 AmmoPool;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon|Ammo")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon Info|Ammo")
 		int32 CurrentAmmo;
 
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
-
-	FTimerHandle AutomaticFireHandle;
-
-	bool bExuteActive = true;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 		void OnInteract(AActor* Caller);
@@ -84,10 +70,4 @@ public:
 
 	UFUNCTION()
 		void SetSimulatePhysics(bool value);
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void FireBullet(float Velocity = 1.0f, float RateOfFire = 0.0f, float RecoilForce = 0.0f, float BulletRange = 1200.0f);
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void FireLineTrace(float RateOfFire, float RecoilForce, float BulletRange);
 };

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Projectile.h"
+#include <TimerManager.h>
 
 #include "ShotgunProjectileComponent.generated.h"
 
@@ -22,9 +23,26 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	FTimerHandle FireTimerHandle;
+	FTimerHandle FireDelayTimerHandle;
+	FTimerDelegate Delegate;
+	bool bFireDelayTimerExpired = true;
+
 public:	
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-	void Fire(float Velocity, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine);
+		void StartFire(float Velocity, float FireRate, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine);
+
+	UFUNCTION()
+		void Fire(float Velocity, float FireRate, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine);
+
+	UFUNCTION(BlueprintCallable, Category = "Projectile")
+		void EndFire();
+
+	UFUNCTION()
+		void FireDelayTimer(float FireRate);
+
+	UFUNCTION()
+		void TimerExpired();
 
 };

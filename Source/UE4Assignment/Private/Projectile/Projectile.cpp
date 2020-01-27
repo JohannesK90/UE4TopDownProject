@@ -27,7 +27,6 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AProjectile::SetupMovement(float Velocity, float BulletRange)

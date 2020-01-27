@@ -268,8 +268,8 @@ void AMyCharacter::DrawLaserSight()
 {
 	if (CurrentWeapon != nullptr)
 	{
-		FVector Start = CurrentWeapon->WeaponMuzzle->GetComponentLocation();
-		FVector End = CurrentWeapon->WeaponMuzzle->GetComponentLocation() + GetViewRotation().Vector() * 1300;
+		FVector Start = CurrentWeapon->WeaponMesh->GetSocketLocation("muzzle");
+		FVector End = Start + GetViewRotation().Vector() * 1300;
 
 		FCollisionQueryParams Params;
 		FHitResult Hits;
