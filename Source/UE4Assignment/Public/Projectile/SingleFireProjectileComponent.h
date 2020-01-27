@@ -31,10 +31,10 @@ protected:
 public:	
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
-		void StartFire(float Velocity, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine);
+		void StartFire(float BulletSpeed = 1000.0f, float FireRate = 0.5f, float BulletRange = 600.0f, float RecoilMaxAngle = 10.0f, bool bDrawDebugLine = true);
 
 	UFUNCTION()
-		void Fire(float Velocity, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine);
+		void Fire(float BulletSpeed, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine);
 
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 		void EndFire();

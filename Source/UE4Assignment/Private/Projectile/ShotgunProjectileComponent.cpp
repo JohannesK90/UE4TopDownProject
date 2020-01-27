@@ -18,13 +18,13 @@ void UShotgunProjectileComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-void UShotgunProjectileComponent::StartFire(float Velocity, float FireRate, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine)
+void UShotgunProjectileComponent::StartFire(float BulletSpeed, float FireRate, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine)
 {
-	Delegate.BindUObject(this, &UShotgunProjectileComponent::Fire, Velocity, FireRate, NumOfBullets, BulletRange, MaxFireAngle, bDrawDebugLine);
+	Delegate.BindUObject(this, &UShotgunProjectileComponent::Fire, BulletSpeed, FireRate, NumOfBullets, BulletRange, MaxFireAngle, bDrawDebugLine);
 	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, Delegate, FireRate, true, 0.0f);
 }
 
-void UShotgunProjectileComponent::Fire(float Velocity, float FireRate, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine)
+void UShotgunProjectileComponent::Fire(float BulletSpeed, float FireRate, float NumOfBullets, float BulletRange, float MaxFireAngle, bool bDrawDebugLine)
 {
 	if (bFireDelayTimerExpired)
 	{
@@ -60,7 +60,7 @@ void UShotgunProjectileComponent::Fire(float Velocity, float FireRate, float Num
 
 			// SpawnActorDeferred -> modify projectile's initialLifeSpan with BulletRange -> FinishSpawningActor
 			AProjectile* Projectile = GetWorld()->SpawnActorDeferred<AProjectile>(Weapon->ProjectileClass, MuzzleTransform);
-			Projectile->SetupMovement(Velocity, BulletRange);
+			Projectile->SetupMovement(BulletSpeed, BulletSpeed, BulletRange);
 			UGameplayStatics::FinishSpawningActor(Projectile, MuzzleTransform);
 
 			FVector LaunchDirection = RandomRotation.Vector();
@@ -83,7 +83,7 @@ void UShotgunProjectileComponent::Fire(float Velocity, float FireRate, float Num
 	else
 	{
 		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-		Delegate.BindUObject(this, &UShotgunProjectileComponent::Fire, Velocity, FireRate, NumOfBullets, BulletRange, MaxFireAngle, bDrawDebugLine);
+		Delegate.BindUObject(this, &UShotgunProjectileComponent::Fire, BulletSpeed, FireRate, NumOfBullets, BulletRange, MaxFireAngle, bDrawDebugLine);
 		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, Delegate, FireRate, true, 0.0f);
 	}
 }

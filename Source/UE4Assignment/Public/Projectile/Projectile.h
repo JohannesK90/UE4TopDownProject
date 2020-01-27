@@ -35,7 +35,7 @@ public:
 		float CollisionRadius = 5.0f;
 
 	// Projectile movement component.
-	UPROPERTY(VisibleAnywhere, Category = "Projectile")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Projectile")
 		UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Projectile")
@@ -44,7 +44,7 @@ public:
 public:
 
 	UFUNCTION()
-	void SetupMovement(float Velocity, float BulletRange);
+	void SetupMovement(float InitialSpeed, float MaxSpeed, float BulletRange);
 
 	// Function that initializes the projectile's velocity in the shoot direction.
 	UFUNCTION()

@@ -29,10 +29,10 @@ void AProjectile::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AProjectile::SetupMovement(float Velocity, float BulletRange)
+void AProjectile::SetupMovement(float InitialSpeed, float MaxSpeed, float BulletRange)
 {
-	ProjectileMovementComponent->InitialSpeed = Velocity * 1000.f;
-	ProjectileMovementComponent->MaxSpeed = Velocity * 1000.f;
+	ProjectileMovementComponent->InitialSpeed = InitialSpeed;
+	ProjectileMovementComponent->MaxSpeed = MaxSpeed;
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	InitialLifeSpan = BulletRange / ProjectileMovementComponent->MaxSpeed;
 }

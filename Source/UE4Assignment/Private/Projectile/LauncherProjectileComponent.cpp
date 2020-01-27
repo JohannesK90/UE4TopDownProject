@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UE4Assignment/Public/Projectile/SingleFireProjectileComponent.h"
+#include "UE4Assignment/Public/Projectile/LauncherProjectileComponent.h"
 #include <Runtime\Engine\Public\DrawDebugHelpers.h>
 #include "Weapon/WeaponBase.h"
 #include <DrawDebugHelpers.h>
@@ -10,23 +10,25 @@
 #include <Engine/Engine.h>
 
 // Sets default values for this component's properties
-USingleFireProjectileComponent::USingleFireProjectileComponent()
+ULauncherProjectileComponent::ULauncherProjectileComponent()
 {}
 
+
 // Called when the game starts
-void USingleFireProjectileComponent::BeginPlay()
+void ULauncherProjectileComponent::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void USingleFireProjectileComponent::StartFire(float BulletSpeed, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine)
+void ULauncherProjectileComponent::StartFire(float InitialSpeed, float MaxSpeed, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine)
 {
-	Delegate.BindUObject(this, &USingleFireProjectileComponent::Fire, BulletSpeed, FireRate, BulletRange, RecoilMaxAngle, bDrawDebugLine);
+	Delegate.BindUObject(this, &ULauncherProjectileComponent::Fire, InitialSpeed, MaxSpeed, FireRate, BulletRange, RecoilMaxAngle, bDrawDebugLine);
 	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, Delegate, FireRate, true, 0.0f);
 }
 
-void USingleFireProjectileComponent::Fire(float BulletSpeed, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine)
+void ULauncherProjectileComponent::Fire(float InitialSpeed, float MaxSpeed, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine)
 {
+
 	if (bFireDelayTimerExpired)
 	{
 		AWeaponBase* Weapon = Cast<AWeaponBase>(GetOwner());
@@ -54,7 +56,7 @@ void USingleFireProjectileComponent::Fire(float BulletSpeed, float FireRate, flo
 
 		// SpawnActorDeferred -> modify projectile's initialLifeSpan with BulletRange -> FinishSpawningActor
 		AProjectile* Projectile = GetWorld()->SpawnActorDeferred<AProjectile>(Weapon->ProjectileClass, MuzzleTransform);
-		Projectile->SetupMovement(BulletSpeed, BulletSpeed, BulletRange);
+		Projectile->SetupMovement(InitialSpeed, MaxSpeed, BulletRange);
 		UGameplayStatics::FinishSpawningActor(Projectile, MuzzleTransform);
 
 		FVector LaunchDirection = RandomRotation.Vector();
@@ -76,27 +78,27 @@ void USingleFireProjectileComponent::Fire(float BulletSpeed, float FireRate, flo
 	else
 	{
 		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-		Delegate.BindUObject(this, &USingleFireProjectileComponent::Fire, BulletSpeed, FireRate, BulletRange, RecoilMaxAngle, bDrawDebugLine);
+		Delegate.BindUObject(this, &ULauncherProjectileComponent::Fire, InitialSpeed, MaxSpeed, FireRate, BulletRange, RecoilMaxAngle, bDrawDebugLine);
 		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, Delegate, FireRate, true, 0.0f);
 	}
 }
 
-void USingleFireProjectileComponent::EndFire()
+void ULauncherProjectileComponent::EndFire()
 {
 	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
 }
 
-void USingleFireProjectileComponent::FireDelayTimer(float FireRate)
+void ULauncherProjectileComponent::FireDelayTimer(float FireRate)
 {
 	// If the timer has expired or does not exist, start it  
 	if ((FireDelayTimerHandle.IsValid() == false) || (bFireDelayTimerExpired))
 	{
-		GetWorld()->GetTimerManager().SetTimer(FireDelayTimerHandle, this, &USingleFireProjectileComponent::TimerExpired, FireRate);
+		GetWorld()->GetTimerManager().SetTimer(FireDelayTimerHandle, this, &ULauncherProjectileComponent::TimerExpired, FireRate);
 		bFireDelayTimerExpired = false;
 	}
 }
 
-void USingleFireProjectileComponent::TimerExpired()
+void ULauncherProjectileComponent::TimerExpired()
 {
 	bFireDelayTimerExpired = true;
 }
