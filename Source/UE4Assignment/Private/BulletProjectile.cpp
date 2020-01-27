@@ -40,12 +40,16 @@ void ABulletProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	FVector Force = GetVelocity() * Mass;
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
+		// if the hit object got physics enable, then we add some force depending of the bullets velocity and mass
 		OtherComp->AddImpulseAtLocation(Force, GetActorLocation());
 	}
-	ParticleSystem->SpawnParticle(Hit.Location, FRotator::ZeroRotator);
-		Destroy();
+	// Spawn VFX particle at the hit location
+	ParticleSystem->SpawnParticle(Hit.Location, Hit.Actor->GetActorRotation());
+
+	Destroy();
 }
 
+// Make sure the ProjectileMovement get the right values
 void ABulletProjectile::SetupBullet(float Velocity, float Range)
 {
 	ProjectileMovement->InitialSpeed = Velocity * 1000.f;

@@ -20,6 +20,7 @@ void UVFX::BeginPlay()
 
 }
 
+//Spawn a new VFX at location
 void UVFX::SpawnParticle(FVector Location, FRotator Rotation)
 {
 	UParticleSystemComponent* SpawnedParticle = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, Location, Rotation);

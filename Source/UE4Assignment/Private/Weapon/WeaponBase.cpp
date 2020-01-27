@@ -40,13 +40,19 @@ void AWeaponBase::SetSimulatePhysics(bool value)
 	WeaponMesh->SetSimulatePhysics(value);
 }
 
+// Default weapon StartFire unless someone override it in blueprints
 void AWeaponBase::StartFire_Implementation()
 {
+
 }
 
+// Default weapon EndFire unless someone override it in blueprints
 void AWeaponBase::EndFire_Implementation()
-{}
+{
 
+}
+
+// Default Reload weapon unless someone override it in blueprints
 void AWeaponBase::Reload()
 {
 	if (AmmoPool <= 0 || CurrentAmmo >= AmmoClip)

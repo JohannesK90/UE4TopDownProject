@@ -49,12 +49,6 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory")
-		int InventorySize = 3;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory")
-		TArray<AWeaponBase*> WeaponInventory;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Interact")
 		float RayTraceZOffset = -80.0f;
 

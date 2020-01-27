@@ -46,11 +46,6 @@ AMyCharacter::AMyCharacter()
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	// Set the inventory size, whit all empty elements
-
-	WeaponInventory.Init(nullptr, InventorySize);
-
 }
 
 // Called when the game starts or when spawned
@@ -228,18 +223,9 @@ void AMyCharacter::EquipWeapon(AWeaponBase* Weapon)
 	CurrentWeapon->DisableComponentsSimulatePhysics();
 	CurrentWeapon->SetActorEnableCollision(false);
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("hand_r_weapon"));
-
-	for (int i = 0; i < InventorySize; i++)
-	{
-		if (WeaponInventory[i] == nullptr)
-		{
-			WeaponInventory[i] = Weapon;
-			break;
-		}
-		//TODO: What if all the slots are occupied, then we should remove the current equiped whit the new weapon.
-	}
 }
 
+// Call the StartFire on the current equipped weapon
 void AMyCharacter::StartFire()
 {
 	if (CurrentWeapon != nullptr)
@@ -248,6 +234,7 @@ void AMyCharacter::StartFire()
 	}
 }
 
+// Call the EndFire on the current equipped weapon
 void AMyCharacter::EndFire()
 {
 	if (CurrentWeapon != nullptr)
@@ -256,6 +243,7 @@ void AMyCharacter::EndFire()
 	}
 }
 
+// Call the Reload on the current equipped weapon
 void AMyCharacter::Reload()
 {
 	if (CurrentWeapon != nullptr)
@@ -264,6 +252,7 @@ void AMyCharacter::Reload()
 	}
 }
 
+// Dirty way of drawing a laser sight, only work in the editor (DrawDebugLine(...))
 void AMyCharacter::DrawLaserSight()
 {
 	if (CurrentWeapon != nullptr)
