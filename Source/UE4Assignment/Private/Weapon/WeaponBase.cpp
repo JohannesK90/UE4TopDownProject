@@ -3,7 +3,6 @@
 
 #include "UE4Assignment/Public/Weapon/WeaponBase.h"
 
-
 // Sets default values
 AWeaponBase::AWeaponBase()
 {
@@ -42,7 +41,8 @@ void AWeaponBase::SetSimulatePhysics(bool value)
 }
 
 void AWeaponBase::StartFire_Implementation()
-{}
+{
+}
 
 void AWeaponBase::EndFire_Implementation()
 {}
@@ -63,5 +63,10 @@ void AWeaponBase::Reload()
 	{
 		AmmoPool -= AmmoClip - CurrentAmmo;
 		CurrentAmmo = AmmoClip;
+	}
+
+	if (ReloadSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ReloadSound, this->GetActorLocation());
 	}
 }

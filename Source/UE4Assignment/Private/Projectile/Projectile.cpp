@@ -2,6 +2,10 @@
 
 
 #include "UE4Assignment/Public/Projectile/Projectile.h"
+#include <Kismet/GameplayStatics.h>
+#include "../MyCharacter.h"
+#include <Sound/SoundBase.h>
+#include "Weapon/WeaponBase.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -39,6 +43,16 @@ void AProjectile::SetupMovement(float InitialSpeed, float MaxSpeed, float Bullet
 
 void AProjectile::FireInDirection(const FVector& ShootDirection)
 {
+	AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (Player->CurrentWeapon->FireSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Player->CurrentWeapon->FireSound, this->GetActorLocation());
+	}
+	if (Player->CurrentWeapon->FireEffect)
+	{
+		FTransform MuzzleTransform = Player->CurrentWeapon->WeaponMesh->GetSocketTransform("muzzle");
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Player->CurrentWeapon->FireEffect, MuzzleTransform);
+	}
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 

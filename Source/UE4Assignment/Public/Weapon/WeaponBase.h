@@ -8,6 +8,9 @@
 #include "Projectile/Projectile.h"
 
 #include <Components/SkeletalMeshComponent.h>
+#include <Kismet/GameplayStatics.h>
+#include <Sound/SoundBase.h>
+#include <Particles/ParticleSystem.h>
 
 #include "WeaponBase.generated.h"
 
@@ -38,6 +41,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon Info|Ammo")
 		int32 CurrentAmmo;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX")
+		USoundBase* FireSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX")
+		USoundBase* ReloadSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX")
+		UParticleSystem* FireEffect;
 
 protected:
 	virtual void BeginPlay() override;
