@@ -18,7 +18,7 @@ public:
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD", Meta = (ToolTip = "Set the main HUD here."))
 	TSubclassOf<class UUserWidget> PlayerHUDClass;
 
 	UPROPERTY()

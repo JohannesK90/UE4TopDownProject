@@ -23,10 +23,10 @@ public:
 	// Sets default values for this actor's properties
 	AWeaponBase();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon Info|Mesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon Info|Mesh", Meta = (ToolTip = "Weapon Mesh."))
 		USkeletalMeshComponent* WeaponMesh;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon Info|Projectile")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Info|Projectile", Meta = (ToolTip = "When firing the weapon, this projectile will be fired."))
 		TSubclassOf<class AProjectile> ProjectileClass;
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Info|Ammo")
@@ -35,22 +35,22 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info")
 		float Damage;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|Ammo")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|Ammo", Meta = (ToolTip = "Ammo amount in a clip."))
 		int32 AmmoClip;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|Ammo")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|Ammo", Meta = (ToolTip = "Extra ammo that this weapon can use."))
 		int32 AmmoPool;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon Info|Ammo")
 		int32 CurrentAmmo;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX", Meta = (ToolTip = "When firing the weapon, this sound will be played."))
 		USoundBase* FireSound;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX", Meta = (ToolTip = "When reloading the weapon, this sound will be played."))
 		USoundBase* ReloadSound;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|SFX/VFX", Meta = (ToolTip = "When the weapon's bullet hits enemy, this effect will be shown."))
 		UParticleSystem* FireEffect;
 
 protected:
