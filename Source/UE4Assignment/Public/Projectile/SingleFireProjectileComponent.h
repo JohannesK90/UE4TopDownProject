@@ -30,13 +30,13 @@ protected:
 
 public:	
 
-	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	UFUNCTION(BlueprintCallable, Category = "Projectile", Meta = (ToolTip = "FireRate - Second between projectiles, RecoilMaxAngle - Projectile will be fired within this angle. Shooting direction +- angle/2, DrawDebugLine - check if you want to see line when projectile moves"))
 		void StartFire(float BulletSpeed = 1000.0f, float FireRate = 0.5f, float BulletRange = 600.0f, float RecoilMaxAngle = 10.0f, bool bDrawDebugLine = true);
 
 	UFUNCTION()
 		void Fire(float BulletSpeed, float FireRate, float BulletRange, float RecoilMaxAngle, bool bDrawDebugLine);
 
-	UFUNCTION(BlueprintCallable, Category = "Projectile")
+	UFUNCTION(BlueprintCallable, Category = "Projectile", Meta = (ToolTip = "This stops auto fire timer."))
 		void EndFire();
 
 	UFUNCTION()

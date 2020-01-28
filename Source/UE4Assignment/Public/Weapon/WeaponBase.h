@@ -59,23 +59,23 @@ protected:
 
 public:
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction", Meta = (ToolTip = "This Evene is called when 'F' key is pressed."))
 		void OnInteract(AActor* Caller);
 	virtual void OnInteract_Implementation(AActor* Caller);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction", Meta = (ToolTip = "This Event is called when the player's interact line trace touches this object."))
 		void StartFocus();
 	void StartFocus_Implementation();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction", Meta = (ToolTip = "This Event is called when the player's interact line trace stops touching this object."))
 		void EndFocus();
 	void EndFocus_Implementation();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
+	UFUNCTION(BlueprintNativeEvent, Category = "Weapon", Meta = (ToolTip = "This Event is called when the player has a weapon and 'Mouse Left' button is pressed."))
 		void StartFire();
 	virtual void StartFire_Implementation();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Weapon")
+	UFUNCTION(BlueprintNativeEvent, Category = "Weapon", Meta = (ToolTip = "This Event is called when the player has a weapon and 'Mouse Left' button is released."))
 		void EndFire();
 	virtual void EndFire_Implementation();
 
