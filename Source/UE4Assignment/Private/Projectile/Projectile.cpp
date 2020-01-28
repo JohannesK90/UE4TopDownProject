@@ -3,7 +3,6 @@
 
 #include "UE4Assignment/Public/Projectile/Projectile.h"
 #include <Kismet/GameplayStatics.h>
-#include "../MyCharacter.h"
 #include <Sound/SoundBase.h>
 #include "Weapon/WeaponBase.h"
 
@@ -31,6 +30,8 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 void AProjectile::SetupMovement(float InitialSpeed, float MaxSpeed, float BulletRange)
@@ -43,7 +44,6 @@ void AProjectile::SetupMovement(float InitialSpeed, float MaxSpeed, float Bullet
 
 void AProjectile::FireInDirection(const FVector& ShootDirection)
 {
-	AMyCharacter* Player = Cast<AMyCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (Player->CurrentWeapon->FireSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Player->CurrentWeapon->FireSound, this->GetActorLocation());
@@ -65,9 +65,19 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	FVector Force = GetVelocity() * Mass;
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL) && OtherComponent->IsSimulatingPhysics())
 	{
+		// if the hit object got physics enable, then we add some force depending of the bullets velocity and mass
 		OtherComponent->AddImpulseAtLocation(Force, GetActorLocation());
 	}
+	if (OtherComponent->ComponentHasTag("Enemy"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Enemy hit"));
+		AWeaponBase* Weapon = Cast<AWeaponBase>(Player->CurrentWeapon);
+		UGameplayStatics::ApplyPointDamage(OtherActor, Weapon->Damage, Hit.Location, Hit, Player->GetInstigatorController(), Player, nullptr);
+	}
+
+	// Spawn VFX particle at the hit location
 	ParticleSystem->SpawnParticle(Hit.Location, FRotator::ZeroRotator);
+
 	Destroy();
 }
 

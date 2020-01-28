@@ -8,6 +8,7 @@
 
 #include <Components/SphereComponent.h>
 #include <GameFramework/ProjectileMovementComponent.h>
+#include "../MyCharacter.h"
 
 #include "Projectile.generated.h"
 
@@ -23,6 +24,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
+
+	AMyCharacter* Player;
 
 public:	
 

@@ -53,7 +53,7 @@ public:
 		float RayTraceZOffset = -80.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Interact")
-		float InteractRayTraceLength = 100.0f;
+		float InteractRayTraceLength = 150.0f;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		AWeaponBase* CurrentWeapon;

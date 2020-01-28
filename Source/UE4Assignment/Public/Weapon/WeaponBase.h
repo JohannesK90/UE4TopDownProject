@@ -32,6 +32,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Info|Ammo")
 		bool bIsReloading = false;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info")
+		float Damage;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon Info|Ammo")
 		int32 AmmoClip;
 
